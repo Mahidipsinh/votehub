@@ -36,47 +36,6 @@ votehub/
 - Email notifications
 - Responsive design
 
-## Deployment Instructions
-
-### Prerequisites
-
-1. Node.js >= 14.0.0
-2. MongoDB Atlas account
-3. Vercel account
-4. Gmail account for SMTP
-
-### Environment Variables
-
-Create a `.env` file in the root directory with the following variables:
-
-```env
-# Server Configuration
-PORT=5000
-NODE_ENV=production
-
-# MongoDB Configuration
-MONGODB_URI=your_mongodb_connection_string
-
-# JWT Configuration
-JWT_SECRET=your_secure_jwt_secret_key
-JWT_EXPIRE=24h
-
-# Cookie Configuration
-COOKIE_SECRET=your_secure_cookie_secret
-
-# Client Configuration
-REACT_APP_API_URL=your_vercel_deployment_url
-
-# Email Configuration
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your_email@gmail.com
-SMTP_PASS=your_app_specific_password
-
-# File Upload Configuration
-UPLOAD_PATH=Server/publicUploads
-```
-
 
 ## Development
 
