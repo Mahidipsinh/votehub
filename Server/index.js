@@ -23,12 +23,12 @@ app.use(cors());
 
 dotenv.config();
 
-// CONNECTING THE DATABASE
+
 mongoose.connect(DB, {
     useNewUrlParser: true,
-    // useCreateIndex: true,
+    
     useUnifiedTopology: true,
-    // useFindAndModify: false
+    
 }).then(() => {
     console.log('database is connected');
 }).catch((err) => {
@@ -40,7 +40,7 @@ app.use('/voterimage', express.static('publicUploads/VoterPhotos'));
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json()); // Send JSON responses
+app.use(bodyParser.json()); 
 
 
 app.use(voterRoutes);
