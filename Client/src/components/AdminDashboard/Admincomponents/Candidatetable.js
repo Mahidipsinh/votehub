@@ -14,6 +14,7 @@ import { Button } from '@mui/material';
 import axios from 'axios';
 import CreateCandidate from './CreateCandidate'
 import { BASE_URL } from '../../../helper';
+import EditCandidateModal from './EditCandidateModal';
 
 const columns = [
     { id: 'fullname', label: `FullName`, minWidth: 150 },
@@ -21,11 +22,10 @@ const columns = [
     { id: 'bio', label: 'Bio', minWidth: 280 },
     { id: 'photo', label: 'Photo', minWidth: 100 },
     { id: 'action', label: 'Action', minWidth: 200 },
-
 ];
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-        // backgroundColor: theme.palette.common,
         color: theme.palette.common.white,
         fontSize: 20,
     },
@@ -38,21 +38,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.action.hover,
     },
-    // hide last border
     '&:last-child td, &:last-child th': {
         border: 0,
     },
 }));
 
-
-
 export default function CandidateTable() {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [candidate, setCandidate] = useState([]);
+    const [selectedCandidate, setSelectedCandidate] = useState(null);
+    const [editModalOpen, setEditModalOpen] = useState(false);
 
     const handleChangePage = (event, newPage) => {
-
         setPage(newPage);
     };
 
@@ -60,29 +58,48 @@ export default function CandidateTable() {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+
     const deleteCandidate = async (id) => {
         try {
             await axios.delete(`${BASE_URL}/deleteCandidate/${id}`);
-            setCandidate(candidate.filter(candidate => candidate._id !== id));
+            setCandidate(candidate.filter(cand => cand._id !== id));
         } catch (error) {
             console.error('Error deleting candidate', error);
         }
     };
-    useEffect(() =>{
-        axios.get(`${BASE_URL}/getCandidate`)
-        .then((response) => setCandidate(response.data.candidate)) 
-        .catch(err => console.error("Error fetching data: ", err));        
-    },[])
+
+    const fetchCandidates = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/getCandidate`);
+            setCandidate(response.data.candidate);
+        } catch (err) {
+            console.error("Error fetching data: ", err);
+        }
+    };
+
+    useEffect(() => {
+        fetchCandidates();
+    }, []);
+
+    const handleEditClick = (candidate) => {
+        setSelectedCandidate(candidate);
+        setEditModalOpen(true);
+    };
+
+    const handleEditModalClose = () => {
+        setEditModalOpen(false);
+        setSelectedCandidate(null);
+    };
 
     return (
-        <div className='Candidates'>
+        <div className='Candidate'>
             <h5>Candidates</h5>
-            <Button id='AddNew' variant="contained"><CreateCandidate/></Button>
+            <CreateCandidate onCandidateCreated={fetchCandidates} />
             <div className='Table'>
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                     <TableContainer sx={{ maxHeight: 440 }}>
                         <Table stickyHeader aria-label="sticky table">
-                            <TableHead >
+                            <TableHead>
                                 <TableRow>
                                     {columns.map((column) => (
                                         <TableCell className='Table-Column-Heading'
@@ -96,21 +113,25 @@ export default function CandidateTable() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-
-                            {candidate.map((row) => (
-                                <StyledTableRow key={row.fullname} className='Table-Row'>
-                                    <StyledTableCell className='Table-Row' component="th" scope="row">{row.fullName}</StyledTableCell>
-                                    <StyledTableCell className='Table-Row' align='left'>{row.party}</StyledTableCell>
-                                    <StyledTableCell className='Table-Row' align="left">{row.bio}</StyledTableCell>
-                                    <StyledTableCell className='Table-Row' align="center"><img src={row.img} alt={row.img}/></StyledTableCell>
-                                    <StyledTableCell className='Table-Row' align="left">
-                                    <span id='edit' className='Button-span'><Button variant="contained" >Edit</Button></span>
-                                    <span id='delete' className='Button-span'><Button variant="contained" onClick={()=> deleteCandidate(row._id)}>Delete</Button></span>
-                                    </StyledTableCell>
-                                </StyledTableRow>
-                            ))}
-                        </TableBody>
-
+                                {candidate.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                                    <StyledTableRow key={row._id} className='Table-Row'>
+                                        <StyledTableCell className='Table-Row' component="th" scope="row">{row.fullName}</StyledTableCell>
+                                        <StyledTableCell className='Table-Row' align='left'>{row.party}</StyledTableCell>
+                                        <StyledTableCell className='Table-Row' align="left">{row.bio}</StyledTableCell>
+                                        <StyledTableCell className='Table-Row' align="center">
+                                            <img src={row.img} alt={`${row.fullName}'s profile`} style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                                        </StyledTableCell>
+                                        <StyledTableCell className='Table-Row' align="left">
+                                            <span id='edit' className='Button-span'>
+                                                <Button variant="contained" onClick={() => handleEditClick(row)}>Edit</Button>
+                                            </span>
+                                            <span id='delete' className='Button-span'>
+                                                <Button variant="contained" onClick={() => deleteCandidate(row._id)}>Delete</Button>
+                                            </span>
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                ))}
+                            </TableBody>
                         </Table>
                     </TableContainer>
                     <TablePagination
@@ -123,11 +144,15 @@ export default function CandidateTable() {
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
                 </Paper>
-
             </div>
-
-
+            {selectedCandidate && (
+                <EditCandidateModal
+                    open={editModalOpen}
+                    handleClose={handleEditModalClose}
+                    candidate={selectedCandidate}
+                    onCandidateUpdated={fetchCandidates}
+                />
+            )}
         </div>
-
     );
 }

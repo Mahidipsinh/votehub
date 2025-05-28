@@ -1,41 +1,90 @@
-.Candidates {
-    padding: 1rem;
+.Candidate {
+    padding: 24px;
+    height: 100%;
 }
-h5{
-    color: rgb(54, 54, 54);
-    font-weight: bold;
-}
-.Candidates .Table{
-    /* border: 1px solid red; */
-    padding: 1rem;
-}
-#AddNew{
-    background-color: rgb(0, 81, 0);
-    font-size: 0.7rem;
-    margin: 0.5rem 1rem;
-}
-.Candidates .Table .Table-Column-Heading{
-    /* border: 1px solid green; */
-    background-color: black;
-    border: 1px solid whitesmoke;
-    color: white;
-    font-weight: bold;
-    font-size: 0.8rem;
-}
-.Candidates .Table .Table-Row{
-    font-size: 0.75rem;
-}
-.Candidates .Table .Table-Row img{
-    width: 80%;
-    height: 80%;
-}   
 
-.Candidates .Table #delete Button{
-    background-color: rgba(173, 0, 0, 0.766);
+.Candidate h5 {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 24px;
 }
-.Candidates .Table .Button-span{
-    margin: 0rem 0.3rem;
+
+.Candidate .Table {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
-.Candidates .Table .Table-Row Button{
-    font-size: 0.75rem;
+
+.Candidate .Table .Table-Column-Heading {
+    background-color: #f5f6fa;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 16px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.Candidate .Table .Table-Row {
+    font-size: 14px;
+    color: #2c3e50;
+    transition: background-color 0.2s ease;
+}
+
+.Candidate .Table .Table-Row:hover {
+    background-color: #f8f9fa;
+}
+
+.Candidate .Table .Table-Row img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e9ecef;
+}
+
+.Candidate .Table #delete Button {
+    background-color: #dc3545;
+    color: white;
+    font-size: 12px;
+    padding: 6px 16px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.Candidate .Table #delete Button:hover {
+    background-color: #c82333;
+}
+
+.Candidate .Table #edit Button {
+    background-color: #0077cc;
+    color: white;
+    font-size: 12px;
+    padding: 6px 16px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.Candidate .Table #edit Button:hover {
+    background-color: #005fa3;
+}
+
+.Candidate .Table .Button-span {
+    margin: 0 8px;
+}
+
+#CreateCandidateButton {
+    background-color: #28a745;
+    color: white;
+    font-size: 14px;
+    padding: 8px 20px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+    transition: all 0.2s ease;
+}
+
+#CreateCandidateButton:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
 }

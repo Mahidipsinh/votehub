@@ -1,9 +1,8 @@
-
 import "./SignUtils/CSS/Sign.css";
 import signupimage from "./SignUtils/images/signup-image.jpg"
 import { Link } from 'react-router-dom';
 import "./SignUtils/CSS/style.css.map"
-import Nav_bar from "../Navbar/Navbar";
+import NavBar from "../Navbar/Navbar";
 import { useState } from "react";
 import axios from "axios"
 import { ToastContainer, toast } from 'react-toastify';
@@ -25,7 +24,6 @@ export default function Signup() {
         className: "toast-message",
     });
     const [loading, setLoading] = useState(false);
-    const [age, setAge] = useState();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -82,22 +80,48 @@ export default function Signup() {
     const handleSubmit = async (e) => {
         setLoading(true);
         e.preventDefault();
+        
+        // Validate passwords match
         if (formData.pass !== formData.re_pass) {
-            alert('Passwords do not match');
-            setLoading(false);
-            return;
-        }
-        setAge(calculateAge(formData.dob));
-        if (age < 18 && age >= 1) {
-            alert('You are not eligible to register')
+            signFailed('Passwords do not match');
             setLoading(false);
             return;
         }
 
+        // Calculate and validate age
+        const calculatedAge = calculateAge(formData.dob);
+        if (calculatedAge < 18) {
+            signFailed('You must be at least 18 years old to register');
+            setLoading(false);
+            return;
+        }
+
+        // Validate required fields
+        if (!formData.firstName || !formData.lastName || !formData.voterid || !formData.phone || !formData.email || !formData.pass || !formData.image) {
+            signFailed('All fields are required');
+            setLoading(false);
+            return;
+        }
+
+        // Validate name lengths
+        if (formData.firstName.length < 3 || formData.firstName.length > 30 || 
+            formData.lastName.length < 3 || formData.lastName.length > 30) {
+            signFailed('First and last names must be between 3 and 30 characters');
+            setLoading(false);
+            return;
+        }
 
         const formDataToSend = new FormData();
         for (const key in formData) {
-            formDataToSend.append(key, formData[key]);
+            if (key === 'voterid' || key === 'phone') {
+                // Convert to number
+                formDataToSend.append(key, Number(formData[key]));
+            } else if (key === 'age') {
+                // Add calculated age
+                formDataToSend.append(key, calculatedAge);
+            } else if (key !== 're_pass') { // Don't send re_pass to server
+                formDataToSend.append(key, formData[key]);
+            }
         }
 
         try {
@@ -106,20 +130,18 @@ export default function Signup() {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            //   console.log(response.data);
+            
             if (response.data.success) {
                 signSuccess();
                 setTimeout(() => {
                     navigate('/Login');
-                }, 2000)
+                }, 2000);
+            } else {
+                signFailed(response.data.message || 'Invalid Details');
             }
-            else {
-                signFailed("Invalid Details");
-            }
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error);
-            signFailed(error);
+            signFailed(error.response?.data?.message || 'Registration failed');
         } finally {
             setLoading(false);
         }
@@ -128,7 +150,7 @@ export default function Signup() {
 
     return (
         <div className="Sign-Container" >
-            <Nav_bar />
+            <NavBar />
             <section className="signup">
                 <div className="container">
                     <div className="signup-content">
@@ -180,7 +202,7 @@ export default function Signup() {
                             </form>
                         </div>
                         <div className="signup-image">
-                            <figure><img src={signupimage} alt="sing up image" /></figure>
+                            <figure><img src={signupimage} alt="Sign up illustration" /></figure>
                             <Link to='/Login' className="signup-image-link">I am already member</Link>
                         </div>
                     </div>

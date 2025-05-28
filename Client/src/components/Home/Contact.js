@@ -3,21 +3,16 @@ import './CSS/contact.css'
 import { ToastContainer, toast } from 'react-toastify';
 import emailjs from 'emailjs-com';
 
-
 const Contact = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
     const [loading, setLoading] = useState(false);
 
     const sendingSuccess = (msg) => toast.success(msg, {
-        // position: toast.POSITION.TOP_CENTER,
         className: "toast-message",
     });
     const sendingFailed = (msg) => toast.error(msg, {
-        // position: toast.POSITION.TOP_CENTER,
         className: "toast-message",
     });
 
@@ -29,29 +24,28 @@ const Contact = () => {
             from_email: email,
             message: message
         };
-        if (!name) {
+        if (!name || !email || !message) {
             sendingFailed("Please Fill All the fields");
             setLoading(false);
+            return;
         }
-        else {
-            try {
-                emailjs.send('service_nxpm74r', 'template_so5nfd8', templateParams, 'AX5QPEWUDd7UZrPe9')
-                    .then((response) => {
-                        console.log('SUCCESS!', response.status, response.text);
-                        setSuccessMessage('Your query has been sent successfully!');
-                        setName('');
-                        setEmail('');
-                        setMessage('');
-                    }, (error) => {
-                        console.error('FAILED...', error);
-                        setErrorMessage('There was an error sending your query. Please try again.');
-                    });
-            } catch (error) {
-                console.log(error)
-                setErrorMessage('There was an error sending your query. Please try again.');
-            } finally {
-                setLoading(false);
-            }
+        try {
+            emailjs.send('service_b8vu9hs', 'template_z8f3xfa', templateParams, 'CNtFOvUybjnR3S2K0')
+                .then((response) => {
+                    console.log('SUCCESS!', response.status, response.text);
+                    sendingSuccess('Your query has been sent successfully!');
+                    setName('');
+                    setEmail('');
+                    setMessage('');
+                }, (error) => {
+                    console.error('FAILED...', error);
+                    sendingFailed('There was an error sending your query. Please try again.');
+                });
+        } catch (error) {
+            console.log(error)
+            sendingFailed('There was an error sending your query. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -88,8 +82,6 @@ const Contact = () => {
                 </div>
                 <button onClick={handleSubmit} disabled={loading}>{loading ? <div className="spinner"></div> : 'Send'}</button>
             </form>
-            {successMessage && <p className="success-message">{successMessage}</p>}
-            {errorMessage && <p className="error-message">{errorMessage}</p>}
         </div>
     );
 };

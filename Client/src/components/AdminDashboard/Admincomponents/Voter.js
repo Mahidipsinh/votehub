@@ -13,7 +13,8 @@ import TableRow from '@mui/material/TableRow';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import { BASE_URL } from '../../../helper';
-
+import { useNavigate } from 'react-router-dom';
+import EditVoterModal from './EditVoterModal';
 
 const columns = [
     { id: 'image', label: `Photo`, minWidth: 100 },
@@ -24,11 +25,10 @@ const columns = [
     { id: 'email', label: 'Email', minWidth: 150 },
     { id: 'phone', label: 'Phone', minWidth: 110 },
     { id: 'action', label: 'Action', minWidth: 200 },
-
 ];
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-        // backgroundColor: theme.palette.common,
         color: theme.palette.common.white,
         fontSize: 20,
     },
@@ -41,17 +41,18 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     '&:nth-of-type(odd)': {
         backgroundColor: theme.palette.action.hover,
     },
-    // hide last border
     '&:last-child td, &:last-child th': {
         border: 0,
     },
 }));
 
 export default function Voter() {
+    const navigate = useNavigate();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [voters, setVoters] = useState([]);
-
+    const [selectedVoter, setSelectedVoter] = useState(null);
+    const [editModalOpen, setEditModalOpen] = useState(false);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -61,29 +62,48 @@ export default function Voter() {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+
     const deleteVoter = async (id) => {
         try {
             await axios.delete(`${BASE_URL}/deleteVoter/${id}`);
             setVoters(voters.filter(voter => voter._id !== id));
         } catch (error) {
-            console.error('Error deleting candidate', error);
+            console.error('Error deleting voter', error);
         }
     };
 
-    useEffect(() =>{
-        axios.get(`${BASE_URL}/getVoter`)
-        .then((response) => setVoters(response.data.voter)) 
-        .catch(err => console.error("Error fetching data: ", err));        
-    },[])
+    const fetchVoters = async () => {
+        try {
+            const response = await axios.get(`${BASE_URL}/getVoter`);
+            setVoters(response.data.voter);
+        } catch (err) {
+            console.error("Error fetching data: ", err);
+        }
+    };
+
+    useEffect(() => {
+        fetchVoters();
+    }, []);
+
+    const handleEditClick = (voter) => {
+        setSelectedVoter(voter);
+        setEditModalOpen(true);
+    };
+
+    const handleEditModalClose = () => {
+        setEditModalOpen(false);
+        setSelectedVoter(null);
+    };
+
     return (
         <div className='Voters'>
             <h5>Voters</h5>
-            <Button id='AddNew' variant="contained">Add New Voter</Button>
+            <Button id='AddNew' variant="contained" onClick={() => navigate('/Signup')}>Add New Voter</Button>
             <div className='Table'>
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
                     <TableContainer sx={{ maxHeight: 440 }}>
                         <Table stickyHeader aria-label="sticky table">
-                            <TableHead >
+                            <TableHead>
                                 <TableRow>
                                     {columns.map((column) => (
                                         <TableCell className='Table-Column-Heading'
@@ -97,27 +117,28 @@ export default function Voter() {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {voters.map((row) => {
-                                    return(
-                                        <StyledTableRow key={row.firstName} className='Table-Row'>
-                                        <StyledTableCell className='Table-Row' align='left'><img src={row.image}/></StyledTableCell>
+                                {voters.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                                    <StyledTableRow key={row._id} className='Table-Row'>
+                                        <StyledTableCell className='Table-Row' align='left'>
+                                            <img src={row.image} alt={`${row.firstName} ${row.lastName}`} style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                                        </StyledTableCell>
                                         <StyledTableCell className='Table-Row' component="th" scope="row">{row.firstName}</StyledTableCell>
                                         <StyledTableCell className='Table-Row' align='left'>{row.lastName}</StyledTableCell>
                                         <StyledTableCell className='Table-Row' align='left'>{row.age}</StyledTableCell>
-                                        <StyledTableCell className='Table-Row' align='left'>{row.voterid}</StyledTableCell> 
+                                        <StyledTableCell className='Table-Row' align='left'>{row.voterid}</StyledTableCell>
                                         <StyledTableCell className='Table-Row' align="left">{row.email}</StyledTableCell>
                                         <StyledTableCell className='Table-Row' align="left">{row.phone}</StyledTableCell>
                                         <StyledTableCell className='Table-Row' align="left">
-                                            <span id='edit' className='Button-span'><Button variant="contained">Edit</Button></span>
-                                            <span id='delete' className='Button-span'><Button variant="contained" onClick={()=>deleteVoter(row._id)}>Delete</Button></span>
+                                            <span id='edit' className='Button-span'>
+                                                <Button variant="contained" onClick={() => handleEditClick(row)}>Edit</Button>
+                                            </span>
+                                            <span id='delete' className='Button-span'>
+                                                <Button variant="contained" onClick={() => deleteVoter(row._id)}>Delete</Button>
+                                            </span>
                                         </StyledTableCell>
                                     </StyledTableRow>
-
-                                    ) 
-                                })}
-                                
+                                ))}
                             </TableBody>
-
                         </Table>
                     </TableContainer>
                     <TablePagination
@@ -130,11 +151,15 @@ export default function Voter() {
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
                 </Paper>
-
             </div>
-
-
+            {selectedVoter && (
+                <EditVoterModal
+                    open={editModalOpen}
+                    handleClose={handleEditModalClose}
+                    voter={selectedVoter}
+                    onVoterUpdated={fetchVoters}
+                />
+            )}
         </div>
-
     );
 }

@@ -3,7 +3,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import './CSS/Nav.css'
 
-function Nav_bar() {
+const NavBar = () => {
   return (
     <Navbar expand="lg" className="Nav">
       {/* <Container className='Nav'>*/}
@@ -21,4 +21,4 @@ function Nav_bar() {
   );
 }
 
-export default Nav_bar;
+export default NavBar;

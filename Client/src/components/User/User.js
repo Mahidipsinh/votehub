@@ -80,18 +80,19 @@ const User = () =>{
   const [singleVoter, setVoter] = useState([]);
 
     useEffect(() => {
-      // const token = localStorage.getItem('token'); // Assuming token is stored in localStorage
-      // console.log(token);'
-      // console.log(voter)
+        if (!voterid) {
+            return;
+        }
+        
         axios.get(`${BASE_URL}/getVoterbyID/${voterid}`)
-          .then((response) => {
-            console.log(response.data)
-            setVoter(response.data.voter);
-          })
-          .catch(error => {
-            console.error('Error fetching user data:', error);
-          });
-    }, []); 
+            .then((response) => {
+                console.log(response.data);
+                setVoter(response.data.voter);
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+            });
+    }, [voterid]);
   
     return(
         <div className="User">
@@ -105,7 +106,7 @@ const User = () =>{
                     {/* <UserUtil voterid = {voterst.id} /> */}
                 </div>
                 <div className='details' ref={revealRefRight}>
-                    <h2> Welcome to <span>Online Voting Platform</span></h2>
+                    
                     <h6>Exercise Your Right to Vote Anytime, Anywhere</h6>
                     <p>Welcome to our online voting platform, where your voice matters. With the convenience of modern technology, we bring democracy to your fingertips, enabling you to participate in important decisions and elections from the comfort of your own home. Our secure and user-friendly platform ensures that your vote is counted accurately and confidentially. Whether it's electing your local representatives, deciding on community initiatives, or participating in organizational polls, our platform empowers you to make a difference.</p>
                 </div>

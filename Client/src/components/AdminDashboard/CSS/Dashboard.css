@@ -1,58 +1,88 @@
-.Dashboard{
-    margin: 0.5rem 1rem;
-    padding: 1rem;
-    overflow-y: scroll;
-    height: 80%;
-    width: 100%;
-}
-.Card{
-
-    width: 30%;
-    display: inline-flex;
+.Dashboard {
+    padding: 24px;
     height: 100%;
-    margin: 1rem 0.5rem;
 }
-h5{
-    color: rgb(54, 54, 54);
-    font-weight: bold;
+
+.Dashboard h5 {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 24px;
 }
-.Card-items{
-    border: 1px solid black;
+
+.Dashboard .Card {
+    width: calc(33.33% - 24px);
+    display: inline-flex;
+    height: 180px;
+    margin: 12px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    background-color: #ffffff;
+}
+
+.Dashboard .Card:hover {
+    transform: translateY(-5px);
+}
+
+.Dashboard .Card-items {
     width: 100%;
     color: white;
-    /* transform: translate(10% ,10%); */
-}
-#Item0{
-    background-color:#015800c9;
-}
-#Item1{
-    background-color:#b40a0ad6;
-}
-#Item2{
-    background-color:#00528af2;
+    padding: 24px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.Card .Head{
-    color: white;
-    font-weight: bold;
-    margin-bottom: 0rem;
+.Dashboard #Item0 {
+    background: linear-gradient(135deg, #015800 0%, #028a02 100%);
+}
 
+.Dashboard #Item1 {
+    background: linear-gradient(135deg, #b40a0a 0%, #e63939 100%);
 }
-.Card .Body{
-    font-size: 1rem;
+
+.Dashboard #Item2 {
+    background: linear-gradient(135deg, #00528a 0%, #0077cc 100%);
 }
-.Card .Footer{
+
+.Dashboard .Card .Head {
     color: white;
-    justify-content: center;
-    align-items: center;
+    font-weight: 700;
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.Dashboard .Card .Body {
+    font-size: 16px;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.Dashboard .Card .Footer {
+    color: white;
     text-align: center;
-    margin-bottom: 0rem;
-
-
+    margin-top: 16px;
 }
-.Card .Footer Button{
+
+.Dashboard .Card .Footer Button {
     color: white;
-    text-align: center;
-    margin: 0rem auto;
-    margin-top: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 8px 16px;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+}
+
+.Dashboard .Card .Footer Button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: white;
+}
+
+.Dashboard .MuiBarChart-root {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 24px;
+    margin-top: 24px;
 }

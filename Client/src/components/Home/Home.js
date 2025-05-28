@@ -1,6 +1,5 @@
-import Nav_bar from "../Navbar/Navbar"
+import NavBar from '../Navbar/Navbar'
 import './CSS/home.css'
-import BackgroundSlider from "./BackgroundSlider"
 import About from "./About"
 import Features from "./Features"
 import Contact from "./Contact"
@@ -11,15 +10,15 @@ const Home = () => {
     return (
         <div className="Home" >
             <div className="Home-content">
-            <Nav_bar />
-            <BackgroundSlider/>
-            <About/>
-            <Features/>
-            <FAQ/>
-            <UpcomingFeatures/>
-            <Contact/>
+                <NavBar />
+                <About/>
+                <Features/>
+                <FAQ/>
+                <UpcomingFeatures/>
+                <Contact/>
             </div>
         </div>
     )
 }
-export default Home
+
+export default Home;

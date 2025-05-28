@@ -2,35 +2,46 @@
     width: 100%;
     height: 100vh;
     position: relative;
-    /* overflow: hidden; */
+    overflow: hidden;
+    background-color: black;
 }
 
-.sliding-image{
-    display: flex;
+.sliding-image {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.slide-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none;
+}
+
+.slide-container.active {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .background-image {
     width: 100%;
     height: 100%;
-    /* object-fit: cover; */
+    object-fit: cover;
+    object-position: center;
+}
+
+.overlay {
     position: absolute;
     top: 0;
     left: 0;
-    /* animation: slide 5s linear infinite; */
-}
-
-.next {
-    animation-delay: 0s;
-}
-
-@keyframes slide {
-    0% {
-        left: 0;
-    }
-
-    100% {
-        left: -100%;
-    }
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0.5));
 }
 
 .background-slider .content {
@@ -38,7 +49,80 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1;
+    z-index: 2;
     color: white;
     text-align: center;
-  }
+    width: 100%;
+    padding: 0 20px;
+}
+
+.background-slider .content h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.background-slider .content p {
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+.slider-controls {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    gap: 1rem;
+}
+
+.slider-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.slider-dot.active {
+    background: white;
+    transform: scale(1.2);
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+    .background-slider {
+        height: 80vh;
+    }
+
+    .background-slider .content h1 {
+        font-size: 2.5rem;
+    }
+
+    .background-slider .content p {
+        font-size: 1.2rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .background-slider {
+        height: 60vh;
+    }
+
+    .background-slider .content h1 {
+        font-size: 2rem;
+    }
+
+    .background-slider .content p {
+        font-size: 1rem;
+    }
+
+    .slider-dot {
+        width: 10px;
+        height: 10px;
+    }
+}

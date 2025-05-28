@@ -1,14 +1,86 @@
-#CreateCandidateButton{
+#CreateCandidateButton {
+    background-color: #28a745;
     color: white;
-    padding: 0rem;
-    font-size: 0.7rem;
+    font-size: 14px;
+    padding: 8px 20px;
+    border-radius: 6px;
+    margin-bottom: 24px;
+    transition: all 0.2s ease;
 }
 
-.CreateCandidateContent{
-    /* border: 1px solid red; */
+#CreateCandidateButton:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+}
+
+.CreateCandidateContent {
     padding: 0;
 }
-.CreateCandidateBox{
-    /* border: 1px solid green; */
+
+.CreateCandidateBox {
     width: 100%;
+}
+
+.CreateCandidateBox .MuiBox-root {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 32px;
+}
+
+.CreateCandidateBox h2 {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 24px;
+}
+
+.CreateCandidateBox .form-group {
+    margin-bottom: 20px;
+}
+
+.CreateCandidateBox label {
+    display: block;
+    color: #2c3e50;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.CreateCandidateBox input,
+.CreateCandidateBox textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+}
+
+.CreateCandidateBox input:focus,
+.CreateCandidateBox textarea:focus {
+    border-color: #0077cc;
+    outline: none;
+}
+
+.CreateCandidateBox .form-submit {
+    background-color: #0077cc;
+    color: white;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.CreateCandidateBox .form-submit:hover {
+    background-color: #005fa3;
+    transform: translateY(-1px);
+}
+
+.CreateCandidateBox .form-submit:disabled {
+    background-color: #e9ecef;
+    cursor: not-allowed;
+    transform: none;
 }
