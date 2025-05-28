@@ -3,7 +3,13 @@
   "builds": [
     {
       "src": "Server/index.js",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "Server/**/*",
+          "Server/publicUploads/**/*"
+        ]
+      }
     },
     {
       "src": "Client/package.json",
@@ -17,6 +23,14 @@
     {
       "src": "/api/(.*)",
       "dest": "Server/index.js"
+    },
+    {
+      "src": "/candidateimage/(.*)",
+      "dest": "Server/publicUploads/CandidatePhotos/$1"
+    },
+    {
+      "src": "/voterimage/(.*)",
+      "dest": "Server/publicUploads/VoterPhotos/$1"
     },
     {
       "src": "/(.*)",

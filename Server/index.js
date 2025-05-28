@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
+const nodemailer = require('nodemailer');
 const voterRoutes = require('./Routes/Voters');
 const candidateRoutes = require('./Routes/Candidate');
 const votesRoute = require('./Routes/Votes');
@@ -14,6 +15,26 @@ const Voters = require('./Model/Voters');
 const multer = require('multer');
 const DB ="mongodb+srv://mahidipsinh:mahidipsinh@cluster0.bc01nef.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 
+// Email configuration
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: process.env.SMTP_PORT || 587,
+  secure: false,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  }
+});
+
+// Test email configuration
+transporter.verify(function(error, success) {
+  if (error) {
+    console.log('Email configuration error:', error);
+  } else {
+    console.log('Email server is ready to send messages');
+  }
+});
 
 app.use(cors());
 // app.use(cors({
