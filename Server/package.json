@@ -31,7 +31,7 @@
     "materialize-css": "^1.0.0",
     "mongodb": "^6.8.0",
     "mongoose": "^7.0.3",
-    "multer": "^1.4.5-lts.1",
+    "multer": "^1.4.4",
     "multer-gridfs-storage": "^5.0.2",
     "nodemailer": "^6.9.1",
     "nodemailer-sendgrid-transport": "^0.2.0",
